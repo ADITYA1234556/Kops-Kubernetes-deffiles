@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vproapp
+  labels:
+    app: vproapp
+spec:
+  selector:
+    matchLabels:
+      app: vproapp
+  replicas: 1
+  template:
+    metadata:
+      name: vproapp
+      labels:
+        app: vproapp
+    spec:
+      initContainers:
+        - name: init-mydb
+          image: busybox
+          command: ['sh', '-c', 'until nslookup vprodb; do echo waiting for mydb; sleep 2; done;']
+        - name: init-memcache
+          image: busybox
+          command: [ 'sh', '-c', 'until nslookup vprocache01; do echo waiting for mydb; sleep 2; done;' ]
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: database-data
+          args: [ "rm", "-rf", "/var/lib/msql/lost+found" ]
+      containers:
+        - name: vproapp
+          image: adityahub2255/tomcat-application:latest
+          ports:
+            - name: vproapp-port
+              containerPort: 8080
+          env:
+            - name: RABBITMQ_DEFAULT_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: application-secret
+                  key: rmq-pass
+            - name: RABBITMQ_DEFAULT_USER
+              value: "guest"
