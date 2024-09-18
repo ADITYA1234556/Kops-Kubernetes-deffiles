@@ -21,7 +21,7 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/mysql
               name: database-data
-          args: ["rm", "-rf", "/var/lib/msql/lost+found"]
+          args: ["rm", "-rf", "/var/lib/mysql/lost+found"]
       containers:
         - name: vprodb
           image: adityahub2255/database-application:latest
