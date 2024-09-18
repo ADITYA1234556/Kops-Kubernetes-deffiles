@@ -3,7 +3,7 @@ COMMANDS
 TO CREATE A VOLUME THAT WILL BE USED BY NODES AND PODS:
 
 aws ec2 create-volume --availability-zone=eu-west-2a --size=3 --volume-type=gp2
-"VolumeId": "vol-02ce5a280bf1fb13c",
+"VolumeId": "vol-00803dec354dc048b"
 
 NOW WE NEED A  NODE IN THE SAME AVAILABILTIY ZONE AS OUR VOLUME, SO WE FIND OUT
 
