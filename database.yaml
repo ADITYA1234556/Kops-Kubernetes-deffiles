@@ -23,7 +23,7 @@ spec:
               name: database-data
           args: ["rm", "-rf", "/var/lib/msql/lost+found"]
       containers:
-        - name: database
+        - name: vprodb
           image: adityahub2255/database-application:latest
 #          args:
 #            - "--ignore-db-dir=lost+found"
@@ -44,5 +44,5 @@ spec:
       volumes:
         - name: database-data
           awsElasticBlockStore:
-            volumeID: vol-02ce5a280bf1fb13c
+            volumeID: vol-00803dec354dc048b
             fsType: ext4
