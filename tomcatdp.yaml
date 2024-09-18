@@ -28,11 +28,3 @@ spec:
           ports:
             - name: vproapp-port
               containerPort: 8080
-          env:
-            - name: RABBITMQ_DEFAULT_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: application-secret
-                  key: rmq-pass
-            - name: RABBITMQ_DEFAULT_USER
-              value: "guest"
