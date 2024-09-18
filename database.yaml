@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: database
+  labels:
+    app: vprodb
+spec:
+  selector:
+    matchLabels:
+      app: vprodb
+  replicas: 1
+  template:
+    metadata:
+      name: database
+      labels:
+        app: vprodb
+    spec:
+      initContainers:
+        - name: busybox
+          image: busybox:1.28
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: database-data
+          args: ["rm", "-rf", "/var/lib/msql/lost+found"]
+      containers:
+        - name: database
+          image: adityahub2255/database-application:latest
+#          args:
+#            - "--ignore-db-dir=lost+found"
+          ports:
+            - name: database-port
+              containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: application-secret
+                  key: db-pass
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: database-data
+      nodeSelector:
+        zone: eu-west-2a
+      volumes:
+        - name: database-data
+          awsElasticBlockStore:
+            volumeID: vol-02ce5a280bf1fb13c
+            fsType: ext4
